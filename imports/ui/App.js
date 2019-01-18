@@ -11,17 +11,15 @@ class App extends Component {
   handleSubmit(event) {
    event.preventDefault();
 
-   // Find the text field via the React ref
    const text = ReactDOM.findDOMNode(this.refs.textInput).value.trim();
 
    Tasks.insert({
      text,
      createdAt: new Date(),
-     owner: Meteor.userId(),           // _id of logged in user
-     username: Meteor.user().username,  // username of logged in user
+     owner: Meteor.userId(),
+     username: Meteor.user().username,
    });
 
-   // Clear form
    ReactDOM.findDOMNode(this.refs.textInput).value = '';
  }
   renderTasks() {
@@ -34,15 +32,17 @@ class App extends Component {
     return (
       <div className="container">
         <header>
+        <div className="head">
           <h1>Liste de la classe</h1>
           <AccountsUIWrapper />
+        </div>
 
           { this.props.currentUser ?
             <form className="new-task" onSubmit={this.handleSubmit.bind(this)} >
               <input
                 type="text"
                 ref="textInput"
-                placeholder="Type to add new tasks"
+                placeholder="Entrer un nouvel élève"
               />
             </form> : ''
           }
@@ -55,6 +55,7 @@ class App extends Component {
     );
   }
 }
+
 export default withTracker(() => {
   return {
     tasks: Tasks.find({}, { sort: { createdAt: -1 } }).fetch(),
